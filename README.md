@@ -1,10 +1,10 @@
-# Nombre del juego (<- borrar y completar)
+# Panic Room 
 
 ## Equipo de desarrollo
 
-- Alguien
-- Persona
-- etc.
+- Galan Osvaldo.
+- Gatti Nicolas.
+- Jimenez Nahuel.
 
 ## Capturas
 
@@ -17,6 +17,6 @@
 
 ## Otros
 
-- Curso/Facultad
-- Versión de wollok
-- Una vez terminado, no tenemos problemas en que el repositorio sea público / queremos manternerlo privado
+- Comision 2 TM.
+- Versión de wollok.
+- Una vez terminado, no tenemos problemas en que el repositorio sea público / queremos manternerlo privado.
