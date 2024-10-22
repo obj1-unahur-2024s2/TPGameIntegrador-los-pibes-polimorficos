@@ -1,4 +1,4 @@
-# Panic Room 
+# Skyforce Legends
 
 
 ## Equipo de desarrollo
@@ -8,27 +8,28 @@
 
 
 ## Capturas
-Aproximaciones de los Puzzles.
 
-Palabras o frases.
-
-![image](https://github.com/user-attachments/assets/88aeb6f1-5dd7-4319-af8e-92346f5b818b)
-
-Relojes.
-
-![image](https://github.com/user-attachments/assets/f30121f5-d4a9-47cc-afcc-8550648b5003)
-
-Llaves y Cofres.
-
-![image](https://github.com/user-attachments/assets/431e4ed3-6752-459d-a995-868c5fd2b24f)
-
-Libros. (No encontramos una foto descriptiva para este puzzle)
+![image](https://github.com/user-attachments/assets/4b409741-4b45-4734-a45f-d2bd06a9c1a0)
 
 
 ## Reglas de Juego / Instrucciones
-- Panic Room es un juego de puzzles, en el que el jugador debera resolver distintos tipos de puzzles, para desbloquear distintos escenarios.
-- Cada nivel tiene un cierto incremento de dificultad, el cual esta plasmado en los puzzles y las pistas.
-- Cada escenario tiene un cronometro, en el cual se deberan resolver los puzzles de dicho escenario. En caso contrario, se termina el juego.
+Instrucciones del Juego:
+Objetivo del Juego: Controlá un avión de combate y destruí las oleadas de enemigos aéreos y terrestres. Evitá los ataques enemigos y recogé potenciadores para mejorar tu nave. ¡Sobreviví todo lo que puedas para obtener la mayor puntuación!
+
+Controles:
+- Mover el Avión: Usando las teclas de flecha (⬆️⬇️⬅️➡️).
+- Disparar: Presioná la barra espaciadora para disparar el arma.
+
+Mecánicas Básicas:
+- Enemigos: Los enemigos aparecerán en oleadas desde la parte superior de la pantalla.
+- Vidas: Empezás con 3 vidas. Si te golpean o colisionás con un enemigo, perdés una vida. Cuando se te acaben, termina el juego.
+
+Condiciones de Victoria/Derrota:
+Victoria:
+Avanzá la mayor cantidad de niveles y alcanzá la mejor puntuación posible antes de perder todas tus vidas.
+
+Derrota:
+Si perdés todas tus vidas, el juego termina.
 
 ## Otros
 - Programacion con Objetos 1 UNAHUR Comision 2 TM (Segundo Cuatrimestre 2024).
