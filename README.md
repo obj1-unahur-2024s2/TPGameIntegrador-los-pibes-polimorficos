@@ -17,7 +17,7 @@ Instrucciones del Juego:
 Objetivo del Juego: Controlá un avión de combate y destruí las oleadas de enemigos aéreos y terrestres. Evitá los ataques enemigos y recogé potenciadores para mejorar tu nave. ¡Sobreviví todo lo que puedas para obtener la mayor puntuación!
 
 Controles:
-- Mover el Avión: Usando las teclas de flecha (⬆️⬇️⬅️➡️).
+- Mover el Avión: Usando las teclas de flecha (⬅️➡️).
 - Disparar: Presioná la barra espaciadora para disparar el arma.
 
 Mecánicas Básicas:
@@ -26,7 +26,7 @@ Mecánicas Básicas:
 
 Condiciones de Victoria/Derrota:
 Victoria:
-Avanzá la mayor cantidad de niveles y alcanzá la mejor puntuación posible antes de perder todas tus vidas.
+Derrotar a todos los enemigos.
 
 Derrota:
 Si perdés todas tus vidas, el juego termina.
