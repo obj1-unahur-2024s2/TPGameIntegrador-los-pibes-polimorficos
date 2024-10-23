@@ -4,15 +4,11 @@ import example.pepita
 
 program PepitaGame {
 	game.title("Pepita")
-	game.height(10)
-	game.width(10)
+	game.height(30)
+	game.width(50)
+	game.boardGround("Nivel1.png")
 
-	// add assets in asset folder, for example, for the background
-  // game.boardGround("fondo2.jpg")
-
-	//
-
-	game.showAttributes(pepita) //Debug
+	//game.showAttributes(pepita) //Debug
 
 	game.start()
 }
