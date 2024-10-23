@@ -1,14 +1,15 @@
 import wollok.game.*
-
-import example.pepita
-
+import config.*
+import naves.*
 program PepitaGame {
 	game.title("Pepita")
-	game.height(30)
-	game.width(50)
-	game.boardGround("Nivel1.png")
-
+	game.height(20)
+	game.width(20)
+	game.boardGround("Nivel1Fondo.png")
+	game.cellSize(25)
+	nivel.nivel1()
+	
 	//game.showAttributes(pepita) //Debug
-
+	
 	game.start()
 }
