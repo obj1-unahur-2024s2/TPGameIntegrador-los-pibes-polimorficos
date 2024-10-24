@@ -19,18 +19,29 @@ class Nave {
 class NaveEnemiga inherits Nave {
 
   method moverAbajo(){
-    game.onTick(400, "Mover Abajo", {=> 
+    game.onTick(1000, "Mover Abajo", {=> 
       if(self.position().y() > 0){
         self.moverA(self.position().down(1))
       }
       else{
         game.removeVisual(self)
         game.removeTickEvent("Mover Abajo")
+        game.removeTickEvent("cadencia")
       }
     })
   }
 
-  override method disparar(){}
+  override method disparar(){
+    game.addVisual(new BalaEnemiga(position = game.at(self.position().x(), self.position().y() - 1), danio = 1, image = "bala2.png"))
+  }
+
+  method cadenciaDeDisparo() {
+    game.onTick(3000, "cadencia", {=> self.disparar()})
+  }
+
+  method initialize() {
+    self.cadenciaDeDisparo()
+  }
 }
 
 class Bala {
@@ -44,7 +55,7 @@ class Bala {
   }
 
   method mover() {
-    game.onTick(300, "Bala movible", {
+    game.onTick(250, "Bala movible", {
       =>
       if (position.y() < game.height() - 1) self.moverA(position.up(1)) else game.removeVisual(self)
     })
@@ -58,9 +69,9 @@ class Bala {
 
 class BalaEnemiga inherits Bala{
   override method mover() {
-    game.onTick(1000, "Bala movible", {
+    game.onTick(250, "Bala movible", {
       =>
-      if (position.y() < 0) self.moverA(position.down(1)) else game.removeVisual(self)
+      if (position.y() >= 0) self.moverA(position.down(1)) else game.removeVisual(self)
     })
   }
 } 
