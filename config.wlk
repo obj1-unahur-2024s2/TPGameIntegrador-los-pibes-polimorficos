@@ -22,9 +22,13 @@ object configuracion{
       if (nivel.nave().position().x() < game.width() - 2)
       nivel.nave().moverA(nivel.nave().position().right(1))
       })
+    
+    keyboard.space().onPressDo({
+      nivel.nave().disparar()
+    })
   }
 
   method colisiones(){
-    game.onCollideDo(nivel.naveEnemiga(), {naveAliada => naveAliada.morir()})
+    // game.onCollideDo(nivel.naveEnemiga(), {naveAliada => naveAliada.morir()})
   }
 }
