@@ -4,7 +4,7 @@ class Nave {
   var property position
 
   method disparar(){
-    game.addVisual(new Bala(position = game.at(self.position().x(), 2), danio = 1, image = "bala1.png"))
+    game.addVisual(new Bala(position = game.at(self.position().x(), 2), danio = 1, image = "balaJugador.png"))
 
   }
 
@@ -29,10 +29,20 @@ class NaveEnemiga inherits Nave {
         game.removeTickEvent("cadencia")
       }
     })
+    
+
+  
+  }
+  
+
+  method morir(){
+     game.removeVisual(self)
+      game.removeTickEvent("Mover Abajo")
+      game.removeTickEvent("cadencia")
   }
 
   override method disparar(){
-    game.addVisual(new BalaEnemiga(position = game.at(self.position().x(), self.position().y() - 1), danio = 1, image = "bala2.png"))
+    game.addVisual(new BalaEnemiga(position = game.at(self.position().x(), self.position().y() - 1), danio = 1, image = "balaEnemigo.png"))
   }
 
   method cadenciaDeDisparo() {
@@ -65,6 +75,10 @@ class Bala {
     self.mover()
   }
   method impactar() {}
+
+  method daniarNave(){
+    game.whenCollideDo(NaveEnemiga, {elemento => elemento.perderVida()})
+  }
 }
 
 class BalaEnemiga inherits Bala{
@@ -74,4 +88,5 @@ class BalaEnemiga inherits Bala{
       if (position.y() >= 0) self.moverA(position.down(1)) else game.removeVisual(self)
     })
   }
+
 } 
