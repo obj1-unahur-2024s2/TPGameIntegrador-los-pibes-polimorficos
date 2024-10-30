@@ -10,9 +10,16 @@ class Nave {
 
   method recibirDanio(){
     salud = 0.max(salud - 1)
+    self.morirSiNoTieneVidas()
   }
+
   method moverA(nuevaPosicion){
     position = nuevaPosicion
+  }
+
+  method morirSiNoTieneVidas(){
+    if(salud == 0)
+    game.removeVisual(self)
   }
 }
 
@@ -35,10 +42,10 @@ class NaveEnemiga inherits Nave {
   }
   
 
-  method morir(){
-     game.removeVisual(self)
-      game.removeTickEvent("Mover Abajo")
-      game.removeTickEvent("cadencia")
+  override method recibirDanio(){
+    super()
+    game.removeTickEvent("Mover Abajo")
+    game.removeTickEvent("cadencia")
   }
 
   override method disparar(){
@@ -58,35 +65,42 @@ class Bala {
   var property position 
   const danio  
   const property image
+
   
 
   method moverA(nuevaPosicion){
     position = nuevaPosicion
   }
 
-  method mover() {
+  method moverYCorroborarColision() {
     game.onTick(250, "Bala movible", {
       =>
-      if (position.y() < game.height() - 1) self.moverA(position.up(1)) else game.removeVisual(self)
+      if (position.y() < game.height() - 1) {self.moverA(position.up(1))} else {game.removeVisual(self)}
+      self.daniarNaveSiHay() 
     })
+    
   }
 
   method initialize() {
-    self.mover()
+    self.moverYCorroborarColision()
   }
-  method impactar() {}
+  
 
-  method daniarNave(){
-    game.whenCollideDo(NaveEnemiga, {elemento => elemento.perderVida()})
+  method daniarNaveSiHay(){
+    if(not game.colliders(self).isEmpty())
+      game.uniqueCollider(self).recibirDanio()
+      
   }
 }
 
 class BalaEnemiga inherits Bala{
-  override method mover() {
+  override method moverYCorroborarColision() {
     game.onTick(250, "Bala movible", {
       =>
-      if (position.y() >= 0) self.moverA(position.down(1)) else game.removeVisual(self)
+      if (position.y() >= 0) {self.moverA(position.down(1))} else {game.removeVisual(self)}
+      
     })
+    
   }
 
 } 

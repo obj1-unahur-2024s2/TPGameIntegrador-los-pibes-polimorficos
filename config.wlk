@@ -1,13 +1,13 @@
 import naves.*
 object nivel{
   const property nave = new Nave (salud = 3, image = "Nave_Full_Vida.png", position = game.at(0, 0))
-  const property naveEnemiga = new NaveEnemiga (salud = 3, image = "enemy-big.png", position = game.at(0, 19))
+  const property naveEnemiga = new NaveEnemiga (salud = 2, image = "enemy-big.png", position = game.at(0, 19))
   method nivel1(){
     game.addVisual(nave)
     game.addVisual(naveEnemiga)
     naveEnemiga.moverAbajo()
     configuracion.controles()
-    configuracion.colisiones()
+    
   }
 }
 
@@ -28,7 +28,5 @@ object configuracion{
     })
   }
 
-  method colisiones(){
-    // game.onCollideDo(nivel.naveEnemiga(), {naveAliada => naveAliada.morir()})
-  }
+  
 }
