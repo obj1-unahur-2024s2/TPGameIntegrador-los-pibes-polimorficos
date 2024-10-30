@@ -5,9 +5,13 @@ class Nave {
   var property position
   var puedeDisparar = true
 
+  method initialize(){
+    self.controlarColision()
+  }
+
   method disparar(){
     if (puedeDisparar) {
-      game.addVisual(new Bala(position = game.at(self.position().x(), 2),image = "balaJugador.png"))
+      game.addVisual(new Bala(position = game.at(self.position().x(), 1),image = "balaJugador.png"))
       self.habilitarCooldownDeDisparo()
     }
   }
@@ -19,10 +23,14 @@ class Nave {
     game.schedule(1000, {=> puedeDisparar = true})
   }
 
-  method colisionar(){
-    if(game.uniqueCollider(self).puedeHacerDanio()){
-      self.recibirDanio()
-    }
+  method controlarColision(){
+    game.onTick(140, "colision", {
+      if (not game.colliders(self).isEmpty()){
+        game.uniqueCollider(self).eliminar()
+        self.recibirDanio()
+      }
+    })
+    
   }
 
   method recibirDanio(){
@@ -50,7 +58,7 @@ class NaveEnemiga inherits Nave {
         self.moverA(self.position().down(1))
       }
       else{
-        self.moverA(game.at(self.position().x(), 0 - game.height()))
+        self.moverA(game.at(self.position().x(), -1))
       }
     })
     }
@@ -79,6 +87,7 @@ class NaveEnemiga inherits Nave {
   override method initialize(){
     self.moverAbajo()
     self.cadenciaDeDisparo()
+    self.controlarColision()
   }
 }
 
