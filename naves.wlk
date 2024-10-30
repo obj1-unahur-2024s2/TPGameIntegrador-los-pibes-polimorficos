@@ -12,7 +12,7 @@ class Nave {
   method disparar(){
     if (puedeDisparar) {
       game.addVisual(new Bala(position = game.at(self.position().x(), 1),image = "balaJugador.png"))
-      self.habilitarCooldownDeDisparo()
+      //self.habilitarCooldownDeDisparo()
     }
   }
 
@@ -24,7 +24,7 @@ class Nave {
   }
 
   method controlarColision(){
-    game.onTick(140, "colision", {
+    game.onTick(0, "colision", {
       if (not game.colliders(self).isEmpty()){
         game.uniqueCollider(self).eliminar()
         self.recibirDanio()
