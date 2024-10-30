@@ -12,7 +12,7 @@ class Nave {
   method disparar(){
     if (puedeDisparar) {
       game.addVisual(new Bala(position = game.at(self.position().x(), 1),image = "balaJugador.png"))
-      //self.habilitarCooldownDeDisparo()
+      self.habilitarCooldownDeDisparo()
     }
   }
 
