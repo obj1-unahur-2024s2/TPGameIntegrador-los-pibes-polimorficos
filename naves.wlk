@@ -120,7 +120,7 @@ class NaveEnemiga2 inherits NaveEnemiga1{
     game.onTick(2000, "cadencia nave enemiga 2", {=> self.disparar()})
   }
 
-  override method estaEnBordeIzquierdo() = self.position().x() == 6
+  override method estaEnBordeIzquierdo() = self.position().x() == 5
 
   override method estaEnBordeDerecho() = self.position().x() == game.width() - 1
 }

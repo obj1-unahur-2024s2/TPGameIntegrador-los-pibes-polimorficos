@@ -33,7 +33,7 @@ object controlNave2 {
 
   method cambiarDireccionDerecha(unEnemigo){
     game.onTick(1000, "derecha nave 2", {
-    unEnemigo.moverALaIzquierda()
+    unEnemigo.moverALaDerecha()
       if (unEnemigo.estaEnBordeDerecho()){
         game.removeTickEvent("derecha nave 2")
         self.cambiarDireccionIzquierda(unEnemigo)
