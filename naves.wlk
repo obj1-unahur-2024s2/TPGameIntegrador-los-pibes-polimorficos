@@ -53,27 +53,10 @@ class Nave {
 class NaveEnemiga inherits Nave {
 
   method moverAbajo(){
-    game.onTick(1500, "Mover Abajo", {=> 
-      if(self.position().y() > 0){
-        self.moverA(self.position().down(1))
-      }
-      else{
-        self.moverA(game.at(self.position().x(), -1))
-      }
-    })
-    }
-  
-  override method puedeDisparar() = self.salud() > 0
-
-
-  override method disparar(){
-    if (self.puedeDisparar()){
-      game.addVisual(new BalaEnemiga(position = game.at(self.position().x(), self.position().y() - 1), 
-        image = "balaEnemigo.png"))
-    }
+    game.onTick(1500, "Mover Abajo", {=> self.moverA(self.position().down(1))})
   }
 
-  method cadenciaDeDisparo() {
+  override method disparar() {
     game.onTick(3000, "cadencia", {=> self.disparar()})
   }
 
@@ -84,10 +67,15 @@ class NaveEnemiga inherits Nave {
     }
   }
 
-  override method initialize(){
-    self.moverAbajo()
-    self.cadenciaDeDisparo()
-    self.controlarColision()
+  method eliminar(){
+    game.removeVisual(self)
   }
+
+  override method initialize(){
+    super()
+    self.disparar()
+    self.moverAbajo()
+  }
+
 }
 
