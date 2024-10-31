@@ -12,7 +12,7 @@ class Bala {
   }
 
   method habilitarMovimiento() {
-    game.onTick(150, "Bala movible", { => 
+    game.onTick(150, "Bala Movible aliada", { => 
     self.moverA(position.up(1))
     self.removerSiEsNecesario()
     })
@@ -26,7 +26,6 @@ class Bala {
 
   method eliminar(){
     game.removeVisual(self)
-    game.removeTickEvent("Bala Movible")
     self.moverA(game.at(self.position().x(), game.height() + 1))
   }
 
@@ -35,7 +34,7 @@ class Bala {
 
 class BalaEnemiga inherits Bala{
   override method habilitarMovimiento() {
-    game.onTick(150, "Bala movible", { => 
+    game.onTick(150, "Bala movible enemiga", { => 
       self.moverA(position.down(1))
       self.removerSiEsNecesario()
     }) 
@@ -46,7 +45,7 @@ class BalaEnemiga inherits Bala{
   override method removerSiEsNecesario(){
     if (self.position().y() < 0){
       game.removeVisual(self)
-      game.removeTickEvent("Bala Movible")
+      game.removeTickEvent("Bala Movible enemiga")
     }
   }
 } 

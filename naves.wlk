@@ -28,10 +28,14 @@ object nave {
   method controlarColision(){
     game.onTick(0, "colision", {
       if (not game.colliders(self).isEmpty()){
-        self.recibirDanio()
-        game.uniqueCollider(self).eliminar()
+        self.colisionar()
       }
     })
+  }
+
+  method colisionar(){
+    self.recibirDanio()
+    game.uniqueCollider(self).eliminar()
   }
 
   method recibirDanio(){
@@ -74,7 +78,7 @@ class NaveEnemiga1 {
   }
 
   method cadenciaDeDisparo() {
-    game.onTick(3000, "cadencia", {=> self.disparar()})
+    game.onTick(3000, "cadencia nave enemiga 1", {=> self.disparar()})
   }
 
   method disparar(){
@@ -99,7 +103,7 @@ class NaveEnemiga1 {
 
 
   method controlarColision(){
-    game.onTick(0, "colision", {
+    game.onTick(0, "colision nave enemiga 1", {
       if (not game.colliders(self).isEmpty() and game.uniqueCollider(self).puedeDaniarEnemigos()){
         game.uniqueCollider(self).eliminar()
         self.recibirDanio()
@@ -116,8 +120,8 @@ class NaveEnemiga1 {
     if (salud == 0 or self.position().y() <= 0){
       self.moverA(game.at(0, game.height() - 1))
       nivel.spawner().disminuirCantidadEnemigosVivos()
-      game.removeTickEvent("colision")
-      game.removeTickEvent("cadencia")
+      game.removeTickEvent("colision nave enemiga 1")
+      game.removeTickEvent("cadencia nave enemiga 1")
       game.removeTickEvent("Mover Abajo")
     }
   }
@@ -128,7 +132,8 @@ class NaveEnemiga1 {
 class NaveEnemiga2 inherits NaveEnemiga1{
 
   override method cadenciaDeDisparo() {
-    game.onTick(2000, "cadencia", {=> self.disparar()})
+    game.onTick(2000, "cadencia nave enemiga 2", {=> self.disparar()})
   }
+
 }
 
