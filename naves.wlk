@@ -1,3 +1,4 @@
+import config.*
 import balas.*
 object nave {
   //la hice objeto ya que en la nave enemiga se hace override de casi todos los metodos
@@ -114,6 +115,7 @@ class NaveEnemiga1 {
   method removerOnTicksYMoverFueraDelTableroSiEsNecesario(){
     if (salud == 0 or self.position().y() <= 0){
       self.moverA(game.at(0, game.height() - 1))
+      nivel.spawner().disminuirCantidadEnemigosVivos()
       game.removeTickEvent("colision")
       game.removeTickEvent("cadencia")
       game.removeTickEvent("Mover Abajo")

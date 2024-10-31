@@ -2,7 +2,7 @@ import naves.*
 import balas.*
 import spawner.*
 object nivel{
-  const spawner = new Spawner (cantidadDeEnemigosASpawnear = 50) 
+  const property spawner = new Spawner (cantidadDeEnemigosASpawnear = 50) 
 
   method nivel1(){
     game.addVisual(nave)
