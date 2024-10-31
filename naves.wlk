@@ -28,8 +28,8 @@ object nave {
   method controlarColision(){
     game.onTick(0, "colision", {
       if (not game.colliders(self).isEmpty()){
-        game.uniqueCollider(self).eliminar()
         self.recibirDanio()
+        game.uniqueCollider(self).eliminar()
       }
     })
   }
