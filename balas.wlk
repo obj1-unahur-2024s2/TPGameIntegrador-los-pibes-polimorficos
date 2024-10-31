@@ -18,10 +18,14 @@ class Bala {
   method eliminar(){
     game.removeVisual(self)
   }
+
+  method puedeDaniarEnemigos() = true
 }
 
 class BalaEnemiga inherits Bala{
   override method habilitarMovimiento() {
     game.onTick(150, "Bala movible", { => self.moverA(position.down(1))}) 
   }
+
+  override method puedeDaniarEnemigos() = false
 } 

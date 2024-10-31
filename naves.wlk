@@ -1,8 +1,9 @@
 import balas.*
-class Nave {
-  var property salud 
-  var property image
-  var property position
+object nave {
+  //la hice objeto ya que en la nave enemiga se hace override de casi todos los metodos
+  var property salud = 3
+  var property image = "Nave_Full_Vida.png"
+  var property position = game.at(0, 0)
   var puedeDisparar = true
 
   method initialize(){
@@ -26,11 +27,10 @@ class Nave {
   method controlarColision(){
     game.onTick(0, "colision", {
       if (not game.colliders(self).isEmpty()){
-        game.uniqueCollider(self).eliminar()
         self.recibirDanio()
+        game.uniqueCollider(self).eliminar()
       }
     })
-    
   }
 
   method recibirDanio(){
@@ -52,8 +52,17 @@ class Nave {
   method eliminar(){}
 }
 
-class NaveEnemiga1 inherits Nave {
-  
+class NaveEnemiga1 {
+  var property salud 
+  var property image 
+  var property position 
+
+  method initialize(){
+    self.controlarColision()
+    self.cadenciaDeDisparo()
+    self.moverAbajo()
+  }
+
   method moverAbajo(){
     game.onTick(2000, "Mover Abajo", {=> self.moverA(self.position().down(1))})
   }
@@ -62,28 +71,40 @@ class NaveEnemiga1 inherits Nave {
     game.onTick(3000, "cadencia", {=> self.disparar()})
   }
 
-  override method disparar(){
+  method disparar(){
     game.addVisual(new BalaEnemiga(position = game.at(self.position().x(), self.position().y() - 1),
       image = "balaEnemigo.png"))
   }
 
-  override method morirSiNoTieneVidas(){
+  method morirSiNoTieneVidas(){
     if(salud == 0){
       self.moverA(game.at(self.position().x(), 0 - game.height()))
       game.removeVisual(self)
     }
   }
 
-  override method eliminar(){
+    method moverA(nuevaPosicion){
+    position = nuevaPosicion
+  }
+
+  method eliminar(){
     game.removeVisual(self)
   }
 
-  override method initialize(){
-    super()
-    self.cadenciaDeDisparo()
-    self.moverAbajo()
+
+  method controlarColision(){
+    game.onTick(0, "colision", {
+      if (not game.colliders(self).isEmpty() and game.uniqueCollider(self).puedeDaniarEnemigos()){
+        self.recibirDanio()
+        game.uniqueCollider(self).eliminar()
+      }
+    })
   }
 
+  method recibirDanio(){
+    salud = 0.max(salud - 1)
+    self.morirSiNoTieneVidas()
+  }
 }
 
 class NaveEnemiga2 inherits NaveEnemiga1{
