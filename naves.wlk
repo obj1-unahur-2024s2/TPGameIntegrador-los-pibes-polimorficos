@@ -27,8 +27,8 @@ object nave {
   method controlarColision(){
     game.onTick(0, "colision", {
       if (not game.colliders(self).isEmpty()){
-        self.recibirDanio()
         game.uniqueCollider(self).eliminar()
+        self.recibirDanio()
       }
     })
   }
@@ -50,6 +50,8 @@ object nave {
   }
 
   method eliminar(){}
+
+  method puedeDaniarEnemigos() = false
 }
 
 class NaveEnemiga1 {
@@ -64,7 +66,10 @@ class NaveEnemiga1 {
   }
 
   method moverAbajo(){
-    game.onTick(2000, "Mover Abajo", {=> self.moverA(self.position().down(1))})
+    game.onTick(2000, "Mover Abajo", {=> 
+      self.moverA(self.position().down(1))
+      self.removerOnTicksYMoverFueraDelTableroSiEsNecesario()
+    })
   }
 
   method cadenciaDeDisparo() {
@@ -78,8 +83,8 @@ class NaveEnemiga1 {
 
   method morirSiNoTieneVidas(){
     if(salud == 0){
-      self.moverA(game.at(self.position().x(), 0 - game.height()))
       game.removeVisual(self)
+      self.removerOnTicksYMoverFueraDelTableroSiEsNecesario()
     }
   }
 
@@ -95,8 +100,8 @@ class NaveEnemiga1 {
   method controlarColision(){
     game.onTick(0, "colision", {
       if (not game.colliders(self).isEmpty() and game.uniqueCollider(self).puedeDaniarEnemigos()){
-        self.recibirDanio()
         game.uniqueCollider(self).eliminar()
+        self.recibirDanio()
       }
     })
   }
@@ -105,6 +110,17 @@ class NaveEnemiga1 {
     salud = 0.max(salud - 1)
     self.morirSiNoTieneVidas()
   }
+
+  method removerOnTicksYMoverFueraDelTableroSiEsNecesario(){
+    if (salud == 0 or self.position().y() <= 0){
+      self.moverA(game.at(0, game.height() - 1))
+      game.removeTickEvent("colision")
+      game.removeTickEvent("cadencia")
+      game.removeTickEvent("Mover Abajo")
+    }
+  }
+
+  method puedeDaniarEnemigos() = false
 }
 
 class NaveEnemiga2 inherits NaveEnemiga1{
