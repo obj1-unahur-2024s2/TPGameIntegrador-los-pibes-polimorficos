@@ -48,6 +48,8 @@ class Nave {
       game.stop()
     }
   }
+
+  method eliminar(){}
 }
 
 class NaveEnemiga inherits Nave {
@@ -56,8 +58,13 @@ class NaveEnemiga inherits Nave {
     game.onTick(1500, "Mover Abajo", {=> self.moverA(self.position().down(1))})
   }
 
-  override method disparar() {
+  method cadenciaDeDisparo() {
     game.onTick(3000, "cadencia", {=> self.disparar()})
+  }
+
+  override method disparar(){
+    game.addVisual(new BalaEnemiga(position = game.at(self.position().x(), self.position().y() - 1),
+      image = "balaEnemigo.png"))
   }
 
   override method morirSiNoTieneVidas(){
@@ -67,13 +74,13 @@ class NaveEnemiga inherits Nave {
     }
   }
 
-  method eliminar(){
+  override method eliminar(){
     game.removeVisual(self)
   }
 
   override method initialize(){
     super()
-    self.disparar()
+    self.cadenciaDeDisparo()
     self.moverAbajo()
   }
 
