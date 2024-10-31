@@ -52,10 +52,10 @@ class Nave {
   method eliminar(){}
 }
 
-class NaveEnemiga inherits Nave {
-
+class NaveEnemiga1 inherits Nave {
+  
   method moverAbajo(){
-    game.onTick(1500, "Mover Abajo", {=> self.moverA(self.position().down(1))})
+    game.onTick(2000, "Mover Abajo", {=> self.moverA(self.position().down(1))})
   }
 
   method cadenciaDeDisparo() {
@@ -84,5 +84,12 @@ class NaveEnemiga inherits Nave {
     self.moverAbajo()
   }
 
+}
+
+class NaveEnemiga2 inherits NaveEnemiga1{
+
+  override method cadenciaDeDisparo() {
+    game.onTick(2000, "cadencia", {=> self.disparar()})
+  }
 }
 

@@ -1,11 +1,13 @@
 import naves.*
 import balas.*
+import spawner.*
 object nivel{
   const property nave = new Nave (salud = 3, image = "Nave_Full_Vida.png", position = game.at(0, 0))
-  const property naveEnemiga = new NaveEnemiga (salud = 2, image = "naveEnemiga1.png", position = game.at(0, 9))
+  const spawner = new Spawner (cantidadDeEnemigosASpawnear = 50) 
+
   method nivel1(){
     game.addVisual(nave)
-    game.addVisual(naveEnemiga)
+    spawner.iniciarSpawn()
     configuracion.controles()
   }
 }
@@ -18,7 +20,7 @@ object configuracion{
         nivel.nave().moverA(nivel.nave().position().left(1))
       })
     keyboard.right().onPressDo({
-      if (nivel.nave().position().x() < game.width() - 2)
+      if (nivel.nave().position().x() < game.width() - 1)
       nivel.nave().moverA(nivel.nave().position().right(1))
       })
     

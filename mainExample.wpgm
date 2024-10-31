@@ -3,7 +3,7 @@ import config.*
 import naves.*
 program PepitaGame {
 	game.title("Pepita")
-	game.height(10)
+	game.height(15)
 	game.width(10)
 	game.boardGround("Nivel1Fondo.png")
 	nivel.nivel1()
