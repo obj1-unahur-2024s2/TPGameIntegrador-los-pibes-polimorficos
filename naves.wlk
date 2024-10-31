@@ -54,8 +54,6 @@ object nave {
     }
   }
 
-  method eliminar(){}
-
   method puedeDaniarEnemigos() = false
 }
 
@@ -103,9 +101,17 @@ class NaveEnemiga1 {
     }
   }
 
-  method moverA(nuevaPosicion){
-    position = nuevaPosicion
+  method moverALaIzquierda(){
+    position = self.position().left(1)
   }
+
+  method moverALaDerecha(){
+    position = self.position().right(1)
+  }
+
+  method estaEnBordeIzquierdo() = self.position().x() == 0
+
+  method estaEnBordeDerecho() = self.position().x() == 4
 }
 
 class NaveEnemiga2 inherits NaveEnemiga1{
@@ -114,5 +120,8 @@ class NaveEnemiga2 inherits NaveEnemiga1{
     game.onTick(2000, "cadencia nave enemiga 2", {=> self.disparar()})
   }
 
+  override method estaEnBordeIzquierdo() = self.position().x() == 6
+
+  override method estaEnBordeDerecho() = self.position().x() == game.width() - 1
 }
 

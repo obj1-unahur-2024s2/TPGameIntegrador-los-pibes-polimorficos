@@ -19,14 +19,13 @@ class Bala {
   }
 
   method removerSiEsNecesario(){
-    if (self.position().y() > game.height()){
+    if (self.position().y() >= game.height()){
       self.eliminar()
     }
   }
 
   method eliminar(){
     game.removeVisual(self)
-    self.moverA(game.at(self.position().x(), game.height() + 1))
   }
 
 }
