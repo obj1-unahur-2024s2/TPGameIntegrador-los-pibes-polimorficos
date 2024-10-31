@@ -14,7 +14,7 @@ object nave {
   method disparar(){
     if (puedeDisparar) {
       game.addVisual(new Bala(position = game.at(self.position().x(), 1),image = "balaJugador.png"))
-      self.habilitarCooldownDeDisparo()
+      //self.habilitarCooldownDeDisparo()
     }
   }
 
@@ -34,8 +34,8 @@ object nave {
   }
 
   method colisionar(){
-    self.recibirDanio()
     game.uniqueCollider(self).eliminar()
+    self.recibirDanio()
   }
 
   method recibirDanio(){
@@ -67,14 +67,24 @@ class NaveEnemiga1 {
   method initialize(){
     self.controlarColision()
     self.cadenciaDeDisparo()
-    self.moverAbajo()
   }
 
-  method moverAbajo(){
-    game.onTick(2000, "Mover Abajo", {=> 
-      self.moverA(self.position().down(1))
-      self.removerOnTicksYMoverFueraDelTableroSiEsNecesario()
+  method controlarColision(){
+    game.onTick(0, "colision nave enemiga 1", {
+      if (not game.colliders(self).isEmpty()){
+        self.colisionar()
+      }
     })
+  }
+
+  method colisionar(){
+    game.uniqueCollider(self).eliminar()
+    self.recibirDanio()
+  }
+
+  method recibirDanio(){
+    salud = 0.max(salud - 1)
+    self.morirSiNoTieneVidas()
   }
 
   method cadenciaDeDisparo() {
@@ -89,44 +99,13 @@ class NaveEnemiga1 {
   method morirSiNoTieneVidas(){
     if(salud == 0){
       game.removeVisual(self)
-      self.removerOnTicksYMoverFueraDelTableroSiEsNecesario()
+      game.removeTickEvent("cadencia nave enemiga 1")
     }
   }
 
-    method moverA(nuevaPosicion){
+  method moverA(nuevaPosicion){
     position = nuevaPosicion
   }
-
-  method eliminar(){
-    game.removeVisual(self)
-  }
-
-
-  method controlarColision(){
-    game.onTick(0, "colision nave enemiga 1", {
-      if (not game.colliders(self).isEmpty() and game.uniqueCollider(self).puedeDaniarEnemigos()){
-        game.uniqueCollider(self).eliminar()
-        self.recibirDanio()
-      }
-    })
-  }
-
-  method recibirDanio(){
-    salud = 0.max(salud - 1)
-    self.morirSiNoTieneVidas()
-  }
-
-  method removerOnTicksYMoverFueraDelTableroSiEsNecesario(){
-    if (salud == 0 or self.position().y() <= 0){
-      self.moverA(game.at(0, game.height() - 1))
-      nivel.spawner().disminuirCantidadEnemigosVivos()
-      game.removeTickEvent("colision nave enemiga 1")
-      game.removeTickEvent("cadencia nave enemiga 1")
-      game.removeTickEvent("Mover Abajo")
-    }
-  }
-
-  method puedeDaniarEnemigos() = false
 }
 
 class NaveEnemiga2 inherits NaveEnemiga1{

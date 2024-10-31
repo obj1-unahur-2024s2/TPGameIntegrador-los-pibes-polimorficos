@@ -1,12 +1,13 @@
 import naves.*
 import balas.*
-import spawner.*
-object nivel{
-  const property spawner = new Spawner (cantidadDeEnemigosASpawnear = 50) 
 
+object nivel{
+  const naveEnemiga1 = new NaveEnemiga1 (salud = 20, image = "naveEnemiga1.png", position = game.at(0, 14))
+  const naveEnemiga2 = new NaveEnemiga2 (salud = 20, image = "naveEnemiga1.png", position = game.at(9, 14))
   method nivel1(){
     game.addVisual(nave)
-    spawner.iniciarSpawn()
+    game.addVisual(naveEnemiga1)
+    game.addVisual(naveEnemiga2)
     configuracion.controles()
   }
 }

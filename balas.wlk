@@ -29,7 +29,6 @@ class Bala {
     self.moverA(game.at(self.position().x(), game.height() + 1))
   }
 
-  method puedeDaniarEnemigos() = true
 }
 
 class BalaEnemiga inherits Bala{
@@ -39,8 +38,6 @@ class BalaEnemiga inherits Bala{
       self.removerSiEsNecesario()
     }) 
   }
-
-  override method puedeDaniarEnemigos() = false
 
   override method removerSiEsNecesario(){
     if (self.position().y() < 0){
