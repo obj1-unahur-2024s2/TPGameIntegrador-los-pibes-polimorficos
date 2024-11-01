@@ -15,12 +15,9 @@ class Nave {
 
   method image() = image
 
-  method imagenNormal() = "Nave_Full_Vida.png"
-  method imagenDaniada() = "Nave_ConDanio.png"
-
   method cambiarImagen(){
-    image = self.imagenDaniada()
-    game.schedule(2000, {=> image = self.imagenNormal()})
+    image = "Nave_ConDanio.png"
+    game.schedule(2000, {=> image = "Nave_Full_Vida.png"})
   }
 
   method actualizarBalas(){
@@ -88,7 +85,19 @@ class NaveEnemiga1 inherits Nave {
     super()
     self.cadenciaDeDisparo()
   }
-   override method cambiarImagen(){}
+   override method cambiarImagen(){
+    if(self.image() == "naveEnemiga1.png")
+    {
+      image = "naveEnemiga1_hit.png"
+      game.schedule(2000, {=> image = "naveEnemiga1.png"})
+    }
+    else
+    {
+      image = "naveEnemiga2_hit.png"
+      game.schedule(2000, {=> image = "naveEnemiga2.png"})
+    }
+  
+   }
 
   override method actualizarBalas(){
     game.onTick(150, self.nombreOnTickDisparos(), {=> 
