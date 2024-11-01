@@ -15,6 +15,14 @@ class Nave {
 
   method image() = image
 
+  method imagenNormal() = "Nave_Full_Vida.png"
+  method imagenDaniada() = "Nave_ConDanio.png"
+
+  method cambiarImagen(){
+    image = self.imagenDaniada()
+    game.schedule(2000, {=> image = self.imagenNormal()})
+  }
+
   method actualizarBalas(){
     game.onTick(150, "disparos nave aliada", {=> 
       balas.forEach({bala => 
@@ -52,6 +60,7 @@ class Nave {
     salud = 0.max(salud - 1)
     console.println("la salud de la nave aliada es " + salud)
     self.morirSiNoTieneVidas()
+    self.cambiarImagen()
   }
 
   method moverA(nuevaPosicion){
@@ -79,6 +88,7 @@ class NaveEnemiga1 inherits Nave {
     super()
     self.cadenciaDeDisparo()
   }
+   override method cambiarImagen(){}
 
   override method actualizarBalas(){
     game.onTick(150, self.nombreOnTickDisparos(), {=> 
