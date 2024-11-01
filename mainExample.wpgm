@@ -6,7 +6,7 @@ program PepitaGame {
 	game.height(15)
 	game.width(10)
 	game.boardGround("Nivel1Fondo.png")
-	nivel.nivel1()
+	nivel.iniciarNivel1()
 	
 	//game.showAttributes(pepita) //Debug
 	
