@@ -1,47 +1,22 @@
-import naves.*
 class Bala {
-  var property position 
+  var position 
   const property image
 
-  method initialize(){
-    self.habilitarMovimiento()
-  }
-
+  method position() = position
+  
   method moverA(nuevaPosicion){
     position = nuevaPosicion
   }
 
-  method habilitarMovimiento() {
-    game.onTick(150, "Bala Movible aliada", { => 
-    self.moverA(position.up(1))
-    self.removerSiEsNecesario()
-    })
+  method moverArriba(){
+    position = self.position().up(1)
   }
 
-  method removerSiEsNecesario(){
-    if (self.position().y() >= game.height()){
-      self.eliminar()
-    }
+  method moverAbajo(){
+    position = self.position().down(1)
   }
 
-  method eliminar(){
+  method desaparecer(){
     game.removeVisual(self)
   }
-
 }
-
-class BalaEnemiga inherits Bala{
-  override method habilitarMovimiento() {
-    game.onTick(150, "Bala movible enemiga", { => 
-      self.moverA(position.down(1))
-      self.removerSiEsNecesario()
-    }) 
-  }
-
-  override method removerSiEsNecesario(){
-    if (self.position().y() < 0){
-      game.removeVisual(self)
-      game.removeTickEvent("Bala Movible enemiga")
-    }
-  }
-} 

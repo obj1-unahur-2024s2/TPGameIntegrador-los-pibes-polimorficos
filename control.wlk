@@ -1,43 +1,42 @@
-object controlNave1{
-  method cambiarDireccionIzquierda(unEnemigo){
-    game.onTick(1000, "izquierda nave 1", {
+object control{
+  method cambiarDireccionIzquierdaConVelocidadANave1(unEnemigo,unaVelocidad){
+    game.onTick(unaVelocidad, "izquierda nave 1", {
       unEnemigo.moverALaIzquierda()
-      if (unEnemigo.estaEnBordeIzquierdo()){
-        game.removeTickEvent("izquierda nave 1")
-        self.cambiarDireccionDerecha(unEnemigo)
-      }
-    })
-    }
+        if (unEnemigo.estaEnBordeIzquierdo()){
+          game.removeTickEvent("izquierda nave 1")
+          self.cambiarDireccionDerechaConVelocidadANave1(unEnemigo,unaVelocidad)
+        }
+      })
+  }
 
-  method cambiarDireccionDerecha(unEnemigo){
-      game.onTick(1000, "derecha nave 1", {
+  method cambiarDireccionDerechaConVelocidadANave1(unEnemigo,unaVelocidad){
+    game.onTick(unaVelocidad, "derecha nave 1", {
       unEnemigo.moverALaDerecha()
-      if (unEnemigo.estaEnBordeDerecho()){
-        game.removeTickEvent("derecha nave 1")
-        self.cambiarDireccionIzquierda(unEnemigo)
+        if (unEnemigo.estaEnBordeDerecho()){
+          game.removeTickEvent("derecha nave 1")
+          self.cambiarDireccionIzquierdaConVelocidadANave1(unEnemigo,unaVelocidad)
         }
-    })
-    }
-}
+      })
+  }
 
-object controlNave2 {
-  method cambiarDireccionIzquierda(unEnemigo){
-    game.onTick(1000, "izquierda nave 2", {
+  method cambiarDireccionIzquierdaConVelocidadANave2(unEnemigo,unaVelocidad){
+    game.onTick(unaVelocidad, "izquierda nave 2", {
       unEnemigo.moverALaIzquierda()
-      if (unEnemigo.estaEnBordeIzquierdo()){
-        game.removeTickEvent("izquierda nave 2")
-        self.cambiarDireccionDerecha(unEnemigo)
-      }
-    })
-    }
-
-  method cambiarDireccionDerecha(unEnemigo){
-    game.onTick(1000, "derecha nave 2", {
-    unEnemigo.moverALaDerecha()
-      if (unEnemigo.estaEnBordeDerecho()){
-        game.removeTickEvent("derecha nave 2")
-        self.cambiarDireccionIzquierda(unEnemigo)
+        if (unEnemigo.estaEnBordeIzquierdo()){
+          game.removeTickEvent("izquierda nave 2")
+          self.cambiarDireccionDerechaConVelocidadANave2(unEnemigo,unaVelocidad)
         }
-    })
-    }
+      })
+  }
+
+  method cambiarDireccionDerechaConVelocidadANave2(unEnemigo,unaVelocidad){
+    game.onTick(unaVelocidad, "derecha nave 2", {
+      unEnemigo.moverALaDerecha()
+        if (unEnemigo.estaEnBordeDerecho()){
+          game.removeTickEvent("derecha nave 2")
+          self.cambiarDireccionIzquierdaConVelocidadANave2(unEnemigo,unaVelocidad)
+        }
+      })
+  }
 }
+
