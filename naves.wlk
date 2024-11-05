@@ -25,12 +25,12 @@ class Nave {
 
   method actualizarBalas(){
     game.onTick(100, "disparos nave aliada", {=> 
-      balas.forEach({bala => bala.moverArribaYEliminarSiCorrespondeDe(self)})
+      balas.forEach({bala => bala.moverArribaYEliminarSiCorrespondeDeLaNaveDuenia()})
     })
   }
 
   method nuevaBala() = new Bala(position = game.at(self.position().x(), 1),image = "balaJugador.png", 
-    puedeDaniarNavesEnemigas = true)
+    puedeDaniarNavesEnemigas = true, naveDuenia = self)
 
   method crearBalaYDispararla(){
     self.disparar(self.nuevaBala())
@@ -51,7 +51,7 @@ class Nave {
 
   method recibirDanioDeYEliminarSiCorresponde(unObjeto){
     salud = 0.max(salud - 1)
-    unObjeto.desaparecerYEliminarseDeLaListaDe(self)
+    unObjeto.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
     console.println("la salud de la nave aliada es " + salud)
     self.morirSiNoTieneVidas()
     self.cambiarImagen()
@@ -110,18 +110,18 @@ class NaveEnemiga inherits Nave {
 
   override method actualizarBalas(){
     game.onTick(100, self.nombreOnTickDisparos(), {=> 
-      balas.forEach({bala => bala.moverAbajoYEliminarSiCorrespondeDe(self)})
+      balas.forEach({bala => bala.moverAbajoYEliminarSiCorrespondeDeLaNaveDuenia()})
     })
   }
   
 
   override method nuevaBala() = new Bala(position = game.at(self.position().x(), self.position().y() - 1)
-  ,image = "balaEnemigo.png", puedeDaniarNavesEnemigas = false)
+  ,image = "balaEnemigo.png", puedeDaniarNavesEnemigas = false, naveDuenia = self)
 
   override method recibirDanioDeYEliminarSiCorresponde(unObjeto){
     if (unObjeto.puedeDaniarNavesEnemigas()){
       salud = 0.max(salud - 1)
-      unObjeto.desaparecerYEliminarseDeLaListaDe(self)
+      unObjeto.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
       console.println("la salud de la nave enemiga que recibio daño es " + salud)
       self.morirSiNoTieneVidas()
       self.cambiarImagen()

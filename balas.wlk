@@ -3,6 +3,7 @@ class Bala {
   var position 
   const property image
   const property puedeDaniarNavesEnemigas
+  const naveDuenia
   
   method position() = position
   
@@ -10,29 +11,29 @@ class Bala {
     position = nuevaPosicion
   }
 
-  method moverArribaYEliminarSiCorrespondeDe(unObjeto){
+  method moverArribaYEliminarSiCorrespondeDeLaNaveDuenia(){
     if (self.position().y() < game.height()){
       position = self.position().up(1)
     }
     else{
-      self.desaparecerYEliminarseDeLaListaDe(unObjeto)
+      self.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
       console.println("desaparecio una bala aliada")
     }
   }
 
-  method moverAbajoYEliminarSiCorrespondeDe(unObjeto){
+  method moverAbajoYEliminarSiCorrespondeDeLaNaveDuenia(){
     if (self.position().y() >= 0){
       position = self.position().down(1)
     }
     else{
-      self.desaparecerYEliminarseDeLaListaDe(unObjeto)
+      self.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
       console.println("desaparecio una bala enemiga")
     }
   }
 
-  method desaparecerYEliminarseDeLaListaDe(unObjeto){
-    unObjeto.balas().remove(self)
-    console.println("Se elimino una bala de una lista")
+  method desaparecerYEliminarseDeLaListaDeLaNaveDuenia(){
+    naveDuenia.balas().remove(self)
+    console.println("Se elimino una bala de la lista de " + naveDuenia)
     game.removeVisual(self)
   }
 }
