@@ -2,8 +2,8 @@ import juego.*
 object configuracion {
 
   method iniciarJuego(){
-    keyboard.num1().onPressDo({juego.iniciarNivel(1)})
-    keyboard.num2().onPressDo({juego.iniciarNivel(2)})
+    keyboard.num1().onPressDo({juego.iniciarNivel1()})
+    keyboard.num2().onPressDo({juego.iniciarNivel2()})
   }
 
   method configurarControlesEn(unObjeto){
@@ -21,7 +21,7 @@ object configuracion {
 
     keyboard.space().onPressDo({ unObjeto.crearBalaYDispararla()})
 
-    keyboard.p().onPressDo({juego.reiniciarJuego()})
+    keyboard.p().onPressDo({juego.limpiarJuego()})
   }
 
   method configurarColisionEn(unObjeto){

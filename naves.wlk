@@ -4,7 +4,7 @@ import balas.*
 import juego.*
 class Nave {
   var salud = 0
-  var  image 
+  var  image = "Nave_Full_Vida.png"
   var  position 
   var puedeDisparar = true
   const property balas = [] 
@@ -50,9 +50,13 @@ class Nave {
   }
 
   method recibirDanioDeYEliminarSiCorresponde(unObjeto){
-    salud = 0.max(salud - 1)
+    self.recibirDanio()
     unObjeto.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
     console.println("la salud de la nave aliada es " + salud)
+  }
+
+  method recibirDanio(){
+    salud = 0.max(salud - 1)
     self.morirSiNoTieneVidas()
     self.cambiarImagen()
   }
@@ -63,31 +67,27 @@ class Nave {
 
   method morirSiNoTieneVidas(){
     if(salud == 0){
-      console.println("mori")
-      game.removeVisual(self)
-      game.removeTickEvent("disparos nave aliada")
-      juego.reiniciarJuego()
+      self.morir()
     }
   }
 
-  method configurarParaNivel(unNivel){
-    if (unNivel == 1){
-      self.configurarParaNivel1()
-    }
-    else{
-      self.configurarParaNivel2()
-    }
+  method morir(){
+    game.removeVisual(self)
+    self.eliminarOnTicks()
+    juego.limpiarJuego()
+  }
+
+  method eliminarOnTicks(){
+    game.removeTickEvent("disparos nave aliada")
   }
 
   method configurarParaNivel1(){
     salud = 3
-    console.println("la nave aliada tiene " + salud + " vidas")
     self.actualizarBalas()
   }
 
   method configurarParaNivel2(){
     salud = 10
-    console.println("la nave aliada tiene " + salud + " vidas")
     self.actualizarBalas()
   }
 }
@@ -114,26 +114,20 @@ class NaveEnemiga inherits Nave {
     })
   }
   
-
   override method nuevaBala() = new Bala(position = game.at(self.position().x(), self.position().y() - 1)
   ,image = "balaEnemigo.png", puedeDaniarNavesEnemigas = false, naveDuenia = self)
 
   override method recibirDanioDeYEliminarSiCorresponde(unObjeto){
     if (unObjeto.puedeDaniarNavesEnemigas()){
-      salud = 0.max(salud - 1)
+      self.recibirDanio()
       unObjeto.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
-      console.println("la salud de la nave enemiga que recibio daño es " + salud)
-      self.morirSiNoTieneVidas()
-      self.cambiarImagen()
     }
   }
 
-  override method morirSiNoTieneVidas(){
-    if(salud == 0){
-      game.removeVisual(self)
-      self.removerOnTicks(self.nombreOnTickCadencia(), self.nombreOnTickMov(), self.nombreOnTickDisparos())
-      juego.disminuirCantidadEnemigosVivos()
-    }
+  override method morir(){
+    game.removeVisual(self)
+    self.eliminarOnTicks()
+    juego.disminuirCantidadEnemigosVivos()
   }
 
   method nombreOnTickCadencia() = "cadencia nave enemiga " + numeroDeNave
@@ -145,29 +139,31 @@ class NaveEnemiga inherits Nave {
   override method habilitarCooldownDeDisparo(){}
 
   override method configurarParaNivel1(){
-    self.configuracionNivel1ParaNumeroDeNave(numeroDeNave)
+    salud = 5
+    cadencia = 2000
+    image = "naveEnemiga1.png"
+    self.configurarBalasDisparosYMovimiento()
     console.println("la nave enemiga tiene " + salud + " vidas")
   }
 
   override method configurarParaNivel2(){
-    self.configuracionNivel2ParaNumeroDeNave(numeroDeNave)
+    salud = 10
+    cadencia = 1000
+    image = "naveEnemiga2.png"
+    self.configurarBalasDisparosYMovimiento()
     console.println("la nave enemiga tiene " + salud + " vidas")
   }
 
-  method removerOnTicks(candencia,movimiento,disparos){
-    game.removeTickEvent(candencia)
-    game.removeTickEvent(movimiento)
-    console.println("murio una nave enemiga")
-    console.println("se elimino el movimiento de una nave enemiga")
-    game.schedule(5000, {=> game.removeTickEvent(disparos)}) 
-  }
-
-  method configuracionNivel1ParaNumeroDeNave(unNumero){
-    salud = 5
-    cadencia = 2000
+  method configurarBalasDisparosYMovimiento(){
     self.cadenciaDeDisparo()
     self.actualizarBalas()
-    self.activarMovimientoParaNumeroDeNave(unNumero)
+    self.activarMovimientoParaNumeroDeNave(numeroDeNave)
+  }
+
+  override method eliminarOnTicks(){
+    game.removeTickEvent(self.nombreOnTickCadencia())
+    game.removeTickEvent(self.nombreOnTickMov())
+    game.schedule(5000, {=> game.removeTickEvent(self.nombreOnTickDisparos())}) 
   }
 
   method activarMovimientoParaNumeroDeNave(unNumero){
@@ -179,21 +175,16 @@ class NaveEnemiga inherits Nave {
     }
   }
 
-  method configuracionNivel2ParaNumeroDeNave(unNumero){
-    salud = 10
-    cadencia = 1000
-    image = "naveEnemiga2.png"
-    self.cadenciaDeDisparo()
-    self.actualizarBalas()
-    self.activarMovimientoParaNumeroDeNave(unNumero)
-  }
-
   method cadenciaDeDisparo() {
     game.onTick(cadencia, self.nombreOnTickCadencia(), {=> self.crearBalaYDispararla()})
   }
 
   method moverALaIzquierda(){
     self.moverA(self.position().left(1))
+  }
+
+  method moverAbajo(){
+    self.moverA(self.position().down(1))
   }
 
   method moverALaDerecha(){

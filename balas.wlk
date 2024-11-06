@@ -17,7 +17,6 @@ class Bala {
     }
     else{
       self.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
-      console.println("desaparecio una bala aliada")
     }
   }
 
@@ -27,13 +26,11 @@ class Bala {
     }
     else{
       self.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
-      console.println("desaparecio una bala enemiga")
     }
   }
 
   method desaparecerYEliminarseDeLaListaDeLaNaveDuenia(){
     naveDuenia.balas().remove(self)
-    console.println("Se elimino una bala de la lista de " + naveDuenia)
     game.removeVisual(self)
   }
 }
