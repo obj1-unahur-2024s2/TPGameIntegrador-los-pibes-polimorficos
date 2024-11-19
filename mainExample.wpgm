@@ -1,13 +1,12 @@
+import sonidos.*
 import wollok.game.*
-import configuracion.*
-program PepitaGame {
-	game.title("Pepita")
+import interfaz.*
+program SkyforceLegends {
+	game.title("Skyforce Legends")
 	game.height(11)
 	game.width(10)
 	game.boardGround("Nivel1Fondo.png")
-	configuracion.iniciarJuego()
-	
-	//game.showAttributes(pepita) //Debug
-	
+	controladorDeImagenes.iniciar()
+	game.schedule(300, {generadorDeSonido.iniciarMusicaDeFondo()})
 	game.start()
 } 

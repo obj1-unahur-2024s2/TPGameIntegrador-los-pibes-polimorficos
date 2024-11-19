@@ -1,36 +1,49 @@
 import naves.*
 class Bala {
-  var position 
-  const property image
+  var position = game.at(0, 0)
+  const property image = "balaJugador.png"
   const property puedeDaniarNavesEnemigas
-  const naveDuenia
-  
+  var estaActiva = false
+
   method position() = position
-  
+
+  method estaActiva() = estaActiva
+
   method moverA(nuevaPosicion){
     position = nuevaPosicion
   }
 
-  method moverArribaYEliminarSiCorrespondeDeLaNaveDuenia(){
+  method mover(){
     if (self.position().y() < game.height()){
       position = self.position().up(1)
     }
     else{
-      self.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
+      self.desaparecer()
     }
   }
 
-  method moverAbajoYEliminarSiCorrespondeDeLaNaveDuenia(){
+  method aparecerEn(unaPosicion){
+    self.moverA(unaPosicion)
+    game.addVisual(self)
+    estaActiva = true
+  }
+
+  method desaparecer(){
+    if(estaActiva){
+      game.removeVisual(self)
+      estaActiva = false
+    }
+  }
+}
+
+class BalaEnemiga inherits Bala (image = "balaEnemigo.png"){
+  
+  override method mover(){
     if (self.position().y() >= 0){
       position = self.position().down(1)
     }
     else{
-      self.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
+      self.desaparecer()
     }
-  }
-
-  method desaparecerYEliminarseDeLaListaDeLaNaveDuenia(){
-    naveDuenia.balas().remove(self)
-    game.removeVisual(self)
   }
 }

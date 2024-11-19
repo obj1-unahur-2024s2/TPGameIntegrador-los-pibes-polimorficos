@@ -1,175 +1,244 @@
+import sonidos.*
+import interfaz.*
 import configuracion.*
 import balas.*
 import juego.*
 class Nave {
   var salud = 0
-  var  image = "Nave_Full_Vida.png"
+  var  image = self.imagenNormalNivel(1)
   var  position = game.at(0, 0)
   var puedeDisparar = true
-  const property balas = [] 
+  const bala = new Bala(puedeDaniarNavesEnemigas = true)
+  var nivel = 1
 
   method position() = position
 
   method image() = image
 
   method cambiarImagen(){
-    image = "Nave_ConDanio.png"
-    game.schedule(500, {=> image = "Nave_Full_Vida.png"})
+    const tiempoDeHit = 300
+    image = self.imagenConDanioNivel(nivel)
+    game.schedule(tiempoDeHit, {=> image = self.imagenNormalNivel(nivel)})
   }
 
-  method actualizarBalas(){
-    balas.forEach({bala => bala.moverArribaYEliminarSiCorrespondeDeLaNaveDuenia()})
+  method cambiarNivelA(unNivel){
+    nivel = unNivel
   }
 
-  method nuevaBala() = new Bala(position = game.at(self.position().x(), 1),image = "balaJugador.png", 
-    puedeDaniarNavesEnemigas = true, naveDuenia = self)
+  method imagenNormalNivel(unNivel) = "Nave_Full_Vida.png"
+
+  method imagenConDanioNivel(unNivel) = "Nave_ConDanio.png"
+  
+  method actualizarBala(){
+    bala.mover()
+  }
 
   method crearBalaYDispararla(){
-    self.disparar(self.nuevaBala())
+    self.crearBalaEnPosicion(position.up(1))
   }
 
-  method disparar(unaBala){
-    if (puedeDisparar) {
-      game.addVisual(unaBala)
-      balas.add(unaBala)
-      //self.habilitarCooldownDeDisparo()
+  method crearBalaEnPosicion(unaPosicion){
+    if (puedeDisparar and not bala.estaActiva()){
+      self.dispararBalaEnPosicion(unaPosicion)
+      self.generarSonidoDeBala()
     }
+  }
+
+  method generarSonidoDeBala(){
+    generadorDeSonido.reproducirSonido("disparoLaser.mp3")
+  }
+
+  method dispararBalaEnPosicion(unaPosicion){
+    bala.aparecerEn(unaPosicion)
+    self.habilitarCooldownDeDisparo()
   }
 
   method dispararAEnemigo(){}
 
   method habilitarCooldownDeDisparo(){
+    self.desactivarPuedeDisparar()
+    game.schedule(1100, {=> self.activarPuedeDisparar()})
+  }
+
+  method desactivarPuedeDisparar(){
     puedeDisparar = false
-    game.schedule(500, {=> puedeDisparar = true})
+  }
+
+  method activarPuedeDisparar(){
+    puedeDisparar = true
   }
 
   method recibirDanioDeYEliminarSiCorresponde(unObjeto){
     self.recibirDanio()
-    unObjeto.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
+    unObjeto.desaparecer()
+    self.disminuirVidasDeLaInterfaz()
   }
 
   method recibirDanio(){
-    salud = 0.max(salud - 1)
+    self.disminuirVidas()
     self.morirSiNoTieneVidas()
     self.cambiarImagen()
   }
 
+  method disminuirVidas(){
+    salud = 0.max(salud - 1)
+    generadorDeSonido.reproducirSonido("sonidoHit.mp3")
+  }
+
+  method disminuirVidasDeLaInterfaz(){
+    vidas.disminuirUnaVida()
+  }
+
+  method aumentarVidasParaModoInfinito(){
+    salud = 5.min(salud + 3)
+    vidas.cambiarVidasA(salud)
+  }
+  
   method moverA(nuevaPosicion){
     position = nuevaPosicion
   }
 
   method morirSiNoTieneVidas(){
     if(salud == 0){
+      generadorDeSonido.reproducirSonido("muerteNave.mp3")
       self.morir()
     }
   }
 
   method morir(){
-    game.removeVisual(self)
-    self.eliminarOnTicks()
-    juego.limpiarJuego()
+    juego.perder()
   }
 
-  method eliminarOnTicks(){}
-
-  method configurarParaNivel1(){
-    salud = 3
-    self.configurar()
-    self.moverA(game.origin())
+  method configurarseParaNivel(){
+    salud = 5.min(3 * nivel)
+    self.configurarMoviendoA(game.origin())
   }
 
-  method configurarParaNivel2(){
-    salud = 10
-    self.configurar()
-    self.moverA(game.origin())
+  method configurarParaModoInfinitoEnY(unaPosicionY){
+    salud = 5
+    self.configurarMoviendoA(game.origin())
   }
 
-  method configurar(){
+  method configurarMoviendoA(unaPosicion){
     configuracion.configurarColisionEn(self)
-    configuracion.configurarControlesEn(self)
+    self.configurarEnPosicion(unaPosicion)
   }
 
-  method mover() {}
+  method configurarEnPosicion(unaPosicion){
+    configuracion.configurarControlesEn(self)
+    self.moverA(unaPosicion)
+    self.activarPuedeDisparar()
+    vidas.aparecerConCantidadDeVidas(salud)
+  }
+
+  method mover(){}
+
 }
 
-class NaveEnemiga inherits Nave {
-  var cadencia = 0
-  const nivel = 1
+class NaveEnemiga inherits Nave (bala = new BalaEnemiga(puedeDaniarNavesEnemigas = false)){
   const bordeIzq
   const bordeDer
-  const numeroDeNave
-  const posicionInicial 
+  const posicionInicial = game.at(9, 9)
   var seTieneQueMoverADerecha = true
-  
-  override method cambiarImagen(){
-    image = "naveEnemiga" + nivel + "_hit.png"
-    game.schedule(500, {=> image = "naveEnemiga" + nivel + ".png"})
-  }
+  var sePuedeMover = false
 
-  override method actualizarBalas(){
-    balas.forEach({bala => bala.moverAbajoYEliminarSiCorrespondeDeLaNaveDuenia()})
-  }
-  
-  override method nuevaBala() = new Bala(position = game.at(self.position().x(), self.position().y() - 1)
-  ,image = "balaEnemigo.png", puedeDaniarNavesEnemigas = false, naveDuenia = self)
+  override method imagenNormalNivel(unNivel) = "naveEnemiga" + unNivel + ".png"
+
+  override method imagenConDanioNivel(unNivel) = "naveEnemiga" + unNivel + "_hit.png"
 
   override method recibirDanioDeYEliminarSiCorresponde(unObjeto){
     if (unObjeto.puedeDaniarNavesEnemigas()){
-      self.recibirDanio()
-      unObjeto.desaparecerYEliminarseDeLaListaDeLaNaveDuenia()
+      super(unObjeto)
     }
   }
 
+  override method disminuirVidasDeLaInterfaz(){}
+
   override method morir(){
+    self.desactivarPuedeDisparar()
     game.removeVisual(self)
-    self.eliminarOnTicks()
-    juego.disminuirCantidadEnemigosVivosYActualizar()
-    modoInfinito.disminuirCantidadEnemigosVivosYActualizar()
-    game.schedule(1200, {=> modoInfinito.naves().remove(self)})
-    puedeDisparar = false
+    self.quitarseDelModoCorrespondiente()
+    sePuedeMover = false
   }
 
-  method nombreOnTickMov() = "movimiento nave " + numeroDeNave
+  method quitarseDelModoCorrespondiente(){
+    if(juego.seEstaJugandoUnNivel()){
+      juego.disminuirCantidadEnemigosVivosYActualizar()
+    }
+    else{
+      juego.modoInfinito().disminuirCantidadEnemigosVivosYActualizar()
+    }
+  }
 
   override method habilitarCooldownDeDisparo(){}
 
-  override method configurarParaNivel1(){
-    salud = 5
-    cadencia = 2000
-    self.configurar()
-  }
-
-  override method configurarParaNivel2(){
-    salud = 10
-    cadencia = 1000
-    self.configurar()
-  }
-
-  override method configurar(){
-    configuracion.configurarColisionEn(self)
-    self.configurarImagenParaNivel(nivel)
-    self.moverA(posicionInicial)
-    puedeDisparar = true
+  override method configurarseParaNivel(){
+    salud = 7.min(3 * nivel)
+    self.configurarMoviendoA(posicionInicial)
     self.configurarMovimiento()
   }
+  
+  override method configurarEnPosicion(unaPosicion){
+    self.configurarImagenParaNivel(nivel)
+    self.moverA(unaPosicion)
+    self.activarPuedeDisparar()
+    sePuedeMover = true
+  }
 
-  override method eliminarOnTicks(){
-    game.removeTickEvent(self.nombreOnTickMov())
+  method configurarMovimiento(){
+    if(position.x() < bordeDer){
+      seTieneQueMoverADerecha = true
+    }
+    else{
+      seTieneQueMoverADerecha = false
+    }
+  }
+  
+  override method configurarParaModoInfinitoEnY(unaPosicionY){
+    salud = 2.randomUpTo(4).truncate(0)
+    self.cambiarNivelA([1,2].anyOne())
+    self.configurarParaModoInfinitoMoviendoA(game.at(0.randomUpTo(9).truncate(0), unaPosicionY))
+  }
+
+  method configurarParaModoInfinitoMoviendoA(unaPosicion){
+    self.configurarMoviendoA(unaPosicion)
+    self.configurarMovimientoModoInfinito()
+  }
+
+  method configurarMovimientoModoInfinito(){
+    if(position.x() < 5){
+      seTieneQueMoverADerecha = true
+    }
+    else{
+      seTieneQueMoverADerecha = false
+    }
   }
 
   override method dispararAEnemigo(){
     self.crearBalaYDispararla()
   }
+
+  override method crearBalaYDispararla(){
+    self.crearBalaEnPosicion(position)
+  }
+
+  override method generarSonidoDeBala(){}
   
   method moverALaIzquierda(){
-    self.moverA(self.position().left(1))
+    self.moverA(position.left(1))
   }
 
   method moverALaDerecha(){
-    self.moverA(self.position().right(1))
+    self.moverA(position.right(1))
   }
 
   override method mover(){
+    if(sePuedeMover){
+      self.moverASiguienteUbicacion()
+    }
+  }
+
+  method moverASiguienteUbicacion(){
     if(seTieneQueMoverADerecha){
       self.moverALaDerecha()
     }
@@ -185,27 +254,13 @@ class NaveEnemiga inherits Nave {
     }
   }
 
-  method estaEnBordeIzquierdo() = self.position().x() == bordeIzq
+  method estaEnBordeIzquierdo() = position.x() == bordeIzq
 
-  method estaEnBordeDerecho() = self.position().x() == bordeDer
+  method estaEnBordeDerecho() = position.x() == bordeDer
 
-  method configurarParaModoInfinito(){
-    salud = 5
-    cadencia = 2000
-    self.configurarImagenParaNivel(nivel)
-    self.configurar()
-  }
 
   method configurarImagenParaNivel(unNivel){
     image = "naveEnemiga" + unNivel + ".png"
   }
 
-  method configurarMovimiento(){
-    if(numeroDeNave.odd()){
-      seTieneQueMoverADerecha = true
-    }
-    else{
-      seTieneQueMoverADerecha = false
-    }
-  }
 }

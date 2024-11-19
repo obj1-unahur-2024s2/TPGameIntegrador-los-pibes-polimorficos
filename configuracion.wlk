@@ -1,12 +1,20 @@
+import interfaz.*
 import juego.*
+import sonidos.*
 object configuracion {
 
-  method iniciarJuego(){
+  method configurarTeclasDeNivelesYMenu(){
     keyboard.num1().onPressDo({juego.iniciarNivel1()})
     keyboard.num2().onPressDo({juego.iniciarNivel2()})
-    keyboard.num3().onPressDo({juego.iniciarModoInfinito()})
-    keyboard.num4().onPressDo({game.addVisual(menu)})
-    keyboard.num5().onPressDo({game.addVisual(ganaste)})
+    keyboard.num3().onPressDo({juego.iniciarNivel3()})
+    keyboard.num4().onPressDo({juego.iniciarModoInfinito()})
+    keyboard.r().onPressDo({controladorDeImagenes.iniciar()})
+  }
+
+  method configurarTeclasDeSonido(){
+    keyboard.up().onPressDo({generadorDeSonido.aumentarVolumenDeMusicaDeFondo()})
+    keyboard.down().onPressDo({generadorDeSonido.disminuirVolumenDeMusicaDeFondo()})
+    keyboard.p().onPressDo({generadorDeSonido.alternarMusicaDeFondo()})
   }
 
   method configurarControlesEn(unObjeto){
@@ -22,28 +30,14 @@ object configuracion {
       }}
     )
 
-    keyboard.space().onPressDo({ unObjeto.crearBalaYDispararla()})
-
-    keyboard.p().onPressDo({juego.limpiarJuego()})
+    keyboard.space().onPressDo({ 
+      unObjeto.crearBalaYDispararla()
+    })
   }
 
   method configurarColisionEn(unObjeto){
     game.onCollideDo(unObjeto, {colision => 
-        unObjeto.recibirDanioDeYEliminarSiCorresponde(colision)
+      unObjeto.recibirDanioDeYEliminarSiCorresponde(colision)
     })
   }
-}
-
-object menu{
-
-  method position() = game.at(1,1)
-
-  method image() = "cuadradito4.png"
-}
-
-object ganaste{
-
-  method position() = game.at(3,5)
-
-  method image() = "rectangulo.png"
 }
