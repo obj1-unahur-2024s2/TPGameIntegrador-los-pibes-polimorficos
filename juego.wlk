@@ -68,7 +68,6 @@ object juego{
 
   method iniciarModo(unModo){
     game.clear()
-    configuracion.configurarTeclasDeSonido()
     seEstaJugandoUnNivel = true
     unModo.iniciar()
     modoActual = unModo
