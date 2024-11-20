@@ -152,10 +152,9 @@ object puntaje {
 }
 
 object vidas {
-  var imagen = "cartelCon3Vidas.png"
   var vidasActuales = 3
 
-  method image() = imagen
+  method image() = "cartelCon" + vidasActuales + "Vidas.png"
 
   method position() = game.at(0, 10)
 
@@ -163,18 +162,12 @@ object vidas {
     self.cambiarVidasA(unaCantidad)
     game.addVisual(self)
   }
-  
-  method cambiarImagenA(unaImagen){
-    imagen = unaImagen
-  }
 
   method disminuirUnaVida(){
     vidasActuales = 1.max(vidasActuales - 1)
-    self.cambiarImagenA("cartelCon" + vidasActuales + "Vidas.png")
   }
 
   method cambiarVidasA(unaCantidad){
     vidasActuales = 5.min(unaCantidad)
-    self.cambiarImagenA("cartelCon" + vidasActuales + "Vidas.png")
   }
 }
